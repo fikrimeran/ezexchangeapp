@@ -27,9 +27,9 @@ class TelegramPollCommand extends Command
     public function __construct()
     {
         parent::__construct();
-        $client = new Client(['verify' => false]);
-        $httpClient = new GuzzleHttpClient($client);
-        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'), false, $httpClient);
+       // $client = new Client(['verify' => false]);
+       // $httpClient = new GuzzleHttpClient($client);
+       // $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'), false, $httpClient);
     }
 
     public function handle()
