@@ -141,4 +141,7 @@ Route::delete('auth/exchangerequests/{exchangerequest}', [App\Http\Controllers\A
 //list of Items 
 Route::get('auth/items', [App\Http\Controllers\Auth\ItemController::class, 'index'])->name('auth.items.index');
 Route::get('auth/items/{item}', [App\Http\Controllers\Auth\ItemController::class, 'show'])->name('auth.items.show');
+Route::get('auth/items/{item}/edit', [App\Http\Controllers\Auth\ItemController::class, 'edit'])->name('auth.items.edit');
+Route::put('auth/items/{item}', [App\Http\Controllers\Auth\ItemController::class, 'update'])->name('auth.items.update');
 Route::delete('auth/items/{item}', [App\Http\Controllers\Auth\ItemController::class, 'destroy'])->name('auth.items.destroy');
+

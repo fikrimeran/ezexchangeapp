@@ -22,7 +22,7 @@
           <th>To Item</th>
           <th>Status</th>
           <th>Created At</th>
-          <th style="width: 200px;">Action</th>
+          <th style="width: 100px;">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -40,25 +40,10 @@
             </td>
             <td>{{ $exchange->created_at->format('d M Y') }}</td>
             <td>
-              {{-- ✅ View --}}
+              {{-- ✅ View only --}}
               <a class="btn btn-info btn-sm" href="{{ route('auth.exchangerequests.show', $exchange->id) }}">
                 <i class="fas fa-eye"></i>
               </a>
-
-              {{-- ✅ Edit --}}
-              <a class="btn btn-primary btn-sm" href="{{ route('auth.exchangerequests.edit', $exchange->id) }}">
-                <i class="fas fa-edit"></i>
-              </a>
-
-              {{-- ✅ Delete with SweetAlert --}}
-              <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $exchange->id }}">
-                <i class="fas fa-trash"></i>
-              </button>
-
-              <form id="delete-form-{{ $exchange->id }}" action="{{ route('auth.exchangerequests.destroy', $exchange->id) }}" method="POST" style="display:none;">
-                @csrf
-                @method('DELETE')
-              </form>
             </td>
           </tr>
         @empty
@@ -75,27 +60,3 @@
     </div>
   </div>
 </div>
-
-{{-- ✅ SweetAlert2 --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-document.querySelectorAll('.btn-delete').forEach(button => {
-  button.addEventListener('click', function() {
-    const exchangeId = this.dataset.id;
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "This exchange history will be deleted permanently!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        document.getElementById(`delete-form-${exchangeId}`).submit();
-      }
-    });
-  });
-});
-</script>

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\Subcategory;
 
 class Item extends Model
 {
@@ -23,11 +26,25 @@ class Item extends Model
     ];
 
     /* Relationships */
-    public function user()     { return $this->belongsTo(User::class); }
-    public function category() { return $this->belongsTo(Category::class); }
-    public function subcategory()
-{
-    return $this->belongsTo(Subcategory::class);
-}
 
+    // User relationship with fallback for deleted user
+    public function user()
+    {
+        return $this->belongsTo(User::class)
+            ->withDefault([
+                'name' => '[User Deleted]',
+            ]);
+    }
+
+    // Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    // Subcategory
+    public function subcategory()
+    {
+        return $this->belongsTo(Subcategory::class);
+    }
 }

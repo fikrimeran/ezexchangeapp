@@ -58,7 +58,14 @@
                 </dd>
             </dl>
 
-            <form action="{{ route('auth.items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');" class="d-inline">
+            {{-- Action buttons --}}
+            <a href="{{ route('auth.items.edit', $item->id) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+
+            <form action="{{ route('auth.items.destroy', $item->id) }}" method="POST" 
+                  onsubmit="return confirm('Are you sure you want to delete this item?');" 
+                  class="d-inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">

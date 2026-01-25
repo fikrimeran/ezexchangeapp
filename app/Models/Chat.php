@@ -22,12 +22,18 @@ class Chat extends Model
 
     public function fromUser()
     {
-        return $this->belongsTo(User::class, 'from_user_id');
+        return $this->belongsTo(User::class, 'from_user_id')
+            ->withDefault([
+                'name' => '[User Deleted]',
+            ]);
     }
 
     public function toUser()
     {
-        return $this->belongsTo(User::class, 'to_user_id');
+        return $this->belongsTo(User::class, 'to_user_id')
+            ->withDefault([
+                'name' => '[User Deleted]',
+            ]);
     }
 
     public function exchangerequest()

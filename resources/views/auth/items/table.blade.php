@@ -20,7 +20,7 @@
                     <th>Subcategory</th>
                     <th>Location</th>
                     <th>Available</th>
-                    <th style="width:150px;">Actions</th>
+                    <th style="width:180px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,11 +34,18 @@
                         <td>{{ $item->item_location }}</td>
                         <td>{{ $item->is_available ? 'Yes' : 'No' }}</td>
                         <td>
-                            <a href="{{ route('auth.items.show', $item->id) }}" class="btn btn-info btn-sm">
+                            {{-- View button --}}
+                            <a href="{{ route('auth.items.show', $item->id) }}" class="btn btn-info btn-sm" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
 
-                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $item->id }}">
+                            {{-- Edit button --}}
+                            <a href="{{ route('auth.items.edit', $item->id) }}" class="btn btn-primary btn-sm" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            {{-- Delete button --}}
+                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $item->id }}" title="Delete">
                                 <i class="fas fa-trash"></i>
                             </button>
 

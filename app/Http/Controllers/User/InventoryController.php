@@ -84,7 +84,7 @@ class InventoryController extends Controller
 
         return redirect()
                ->route('user.inventory')
-               ->with('success', 'Item added successfully & sent to Telegram!');
+               ->with('success', 'Item added successfully!');
     }
 
     /**

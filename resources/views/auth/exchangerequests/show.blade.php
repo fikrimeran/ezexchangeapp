@@ -30,18 +30,6 @@
         <dt class="col-sm-3">Created At:</dt>
         <dd class="col-sm-9">{{ $exchangerequest->created_at->format('d M Y, H:i A') }}</dd>
       </dl>
-
-      <a href="{{ route('auth.exchangerequests.edit', $exchangerequest->id) }}" class="btn btn-primary btn-sm">
-        <i class="fas fa-edit"></i> Edit
-      </a>
-
-      <form action="{{ route('auth.exchangerequests.destroy', $exchangerequest->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this exchange request?');">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger btn-sm">
-          <i class="fas fa-trash"></i> Delete
-        </button>
-      </form>
     </div>
   </div>
 </div>

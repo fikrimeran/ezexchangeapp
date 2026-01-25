@@ -21,19 +21,35 @@ class ExchangeRequest extends Model
         'status',
     ];
 
-    public function fromUser() {
-    return $this->belongsTo(User::class, 'from_user_id');
+    public function fromUser()
+    {
+        return $this->belongsTo(User::class, 'from_user_id')
+            ->withDefault([
+                'name' => '[User Deleted]',
+            ]);
     }
 
-    public function toUser() {
-        return $this->belongsTo(User::class, 'to_user_id');
+    public function toUser()
+    {
+        return $this->belongsTo(User::class, 'to_user_id')
+            ->withDefault([
+                'name' => '[User Deleted]',
+            ]);
     }
 
-    public function fromItem() {
-        return $this->belongsTo(Item::class, 'from_item_id');
+    public function fromItem()
+    {
+        return $this->belongsTo(Item::class, 'from_item_id')
+            ->withDefault([
+                'item_name' => '[Item Removed]',
+            ]);
     }
 
-    public function toItem() {
-        return $this->belongsTo(Item::class, 'to_item_id');
+    public function toItem()
+    {
+        return $this->belongsTo(Item::class, 'to_item_id')
+            ->withDefault([
+                'item_name' => '[Item Removed]',
+            ]);
     }
 }
