@@ -2,34 +2,71 @@
 
 @section('content')
 <div class="container py-5">
+
     <!-- Back Button -->
     <div class="mb-3">
-        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+        <a href="{{ route('user.notification') }}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left-circle me-2"></i>Back
         </a>
     </div>
+
     <h1 class="mb-5 text-center">Exchange Request</h1>
 
     <div class="card shadow rounded-4 border-0 p-4">
-        <!-- From User -->
+
+        <!-- From User (Item Offered) -->
         <div class="mb-4 d-flex align-items-center">
+            {{-- Offered Item Image --}}
             <div class="me-3">
-                <i class="bi bi-person-circle fs-2 text-primary"></i>
+                @php
+                    if ($req->fromItem->item_image) {
+                        $fromImage = Str::startsWith($req->fromItem->item_image, ['http://', 'https://'])
+                            ? $req->fromItem->item_image
+                            : asset('storage/' . $req->fromItem->item_image);
+                    } else {
+                        $fromImage = asset('images/placeholder.png');
+                    }
+                @endphp
+                <img src="{{ $fromImage }}"
+                     alt="Offered Item Image"
+                     class="rounded border"
+                     style="width:90px; height:90px; object-fit:cover;">
             </div>
+
+            {{-- Offered Item Details --}}
             <div>
                 <h5 class="mb-1">From: {{ $req->fromUser->name }}</h5>
-                <p class="mb-0 text-muted">Item Offered: {{ $req->fromItem->item_name }}</p>
+                <p class="mb-0 text-muted">
+                    Item Offered: {{ $req->fromItem->item_name }}
+                </p>
             </div>
         </div>
 
         <!-- Requested Item -->
         <div class="mb-4 d-flex align-items-center">
+            {{-- Requested Item Image --}}
             <div class="me-3">
-                <i class="bi bi-gift fs-2 text-success"></i>
+                @php
+                    if ($req->toItem->item_image) {
+                        $toImage = Str::startsWith($req->toItem->item_image, ['http://', 'https://'])
+                            ? $req->toItem->item_image
+                            : asset('storage/' . $req->toItem->item_image);
+                    } else {
+                        $toImage = asset('images/placeholder.png');
+                    }
+                @endphp
+                <img src="{{ $toImage }}"
+                     alt="Requested Item Image"
+                     class="rounded border"
+                     style="width:90px; height:90px; object-fit:cover;">
             </div>
+
+            {{-- Requested Item Details --}}
             <div>
                 <h5 class="mb-1">Requested Item</h5>
-                <p class="mb-0 text-muted">{{ $req->toItem->item_name }}</p>
+                <p class="mb-0 text-muted">
+                    {{ $req->toItem->item_name }}
+                </p>
             </div>
         </div>
 
@@ -68,6 +105,7 @@
             </form>
         </div>
         @endif
+
     </div>
 </div>
 @endsection

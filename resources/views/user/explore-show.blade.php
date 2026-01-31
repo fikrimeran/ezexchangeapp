@@ -5,7 +5,7 @@
 
     {{-- 🔹 Top bar with back and exchange buttons --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+        <a href="{{ route('user.explore') }}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left-circle me-2"></i>Back
         </a>
 

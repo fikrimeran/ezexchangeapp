@@ -15,14 +15,11 @@
             {{-- Left: Image --}}
             <div class="col-md-5 text-center">
                 @php
-                    // Determine correct image URL
                     if ($item->item_image) {
-                        // If image path starts with "http", it's a Cloudinary URL
                         $imageUrl = Str::startsWith($item->item_image, ['http://', 'https://'])
                             ? $item->item_image
                             : asset('storage/' . $item->item_image);
                     } else {
-                        // Fallback placeholder image
                         $imageUrl = asset('images/placeholder.png');
                     }
                 @endphp
@@ -60,8 +57,38 @@
                     <strong><i class="bi bi-file-text me-1"></i> Description:</strong><br>
                     {{ $item->item_description }}
                 </p>
+
+                {{-- 💰 Estimated Price Section --}}
+                <p class="text-muted mt-3 mb-0" id="estimateResult">
+                    ⏳ Calculating estimated value...
+                </p>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const result = document.getElementById('estimateResult');
+
+    // ✅ Fetch estimated price
+    fetch("{{ route('item.estimate', $item->id) }}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                result.innerHTML = "⚠️ " + data.error;
+            } else {
+                result.innerHTML =
+                    "💰 Estimated Value: <strong>" + data.estimated_price + "</strong><br>" +
+                    "(Based on " + data.prices_found + " listings)";
+            }
+        })
+        .catch(error => {
+            result.textContent = "⚠️ Error fetching estimate.";
+            console.error(error);
+        });
+});
+</script>
+@endpush

@@ -4,7 +4,7 @@
 <div class="container">
     <!-- Back Button -->
     <div class="mb-3">
-        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+        <a href="{{ route('user.chat') }}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left-circle me-2"></i>Back
         </a>
     </div>

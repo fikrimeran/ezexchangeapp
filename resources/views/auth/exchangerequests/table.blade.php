@@ -55,8 +55,8 @@
     </table>
 
     {{-- ✅ Pagination --}}
-    <div class="d-flex justify-content-center mt-3">
-      {!! $exchangerequests->links() !!}
+    <div class="mt-3">
+      {{ $exchangerequests->links('pagination::bootstrap-5') }}
     </div>
   </div>
 </div>
