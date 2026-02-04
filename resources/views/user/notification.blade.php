@@ -5,8 +5,15 @@
     <h1 class="mb-4">Notifications</h1>
 
     @forelse ($notifications as $req)
-        <div class="card mb-3 {{ $req->status !== 'pending' ? 'opacity-75' : '' }}">
+        <div class="card mb-3 
+            {{ $req->status === 'pending' ? 'border-warning shadow-sm' : 'opacity-75' }}">
+            
             <div class="card-body">
+                {{-- NEW / pending badge --}}
+                @if($req->status === 'pending')
+                    <span class="badge bg-warning text-dark mb-2">ACTION REQUIRED</span>
+                @endif
+
                 <p class="mb-2">
                     <strong>{{ $req->fromUser->name }}</strong>
                     wants to trade

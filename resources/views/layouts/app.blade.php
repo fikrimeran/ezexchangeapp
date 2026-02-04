@@ -108,12 +108,17 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/user/notification') }}">
                                 <i class="bi bi-bell"></i> Notifications
+                                @if(($unreadNotifications ?? 0) > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $unreadNotifications }}
+                                    </span>
+                                @endif                                
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/user/chat') }}">
-                                <i class="bi bi-chat-dots"></i> Chat
+                                <i class="bi bi-chat-dots"></i> Chat                               
                             </a>
                         </li>
 
