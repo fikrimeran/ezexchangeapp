@@ -59,16 +59,14 @@
                     </select>
                 </div>
 
-                {{-- Nearby toggle --}}
-                <div class="col-md-2 d-flex justify-content-start align-items-center">
-                    <div class="form-check form-switch">
-                        <input type="checkbox"
-                            name="nearby"
-                            id="nearby"
-                            class="form-check-input"
-                            {{ request('nearby') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="nearby">Nearby Only</label>
-                    </div>
+                {{-- Nearby radius dropdown --}}
+                <div class="col-md-2">
+                    <select name="radius" id="radius_filter" class="form-select">
+                        <option value="">Nearby</option>
+                        <option value="10" {{ request('radius') == 10 ? 'selected' : '' }}>10 km</option>
+                        <option value="30" {{ request('radius') == 30 ? 'selected' : '' }}>30 km</option>
+                        <option value="50" {{ request('radius') == 50 ? 'selected' : '' }}>50 km</option>
+                    </select>
                 </div>
 
                 {{-- Submit button --}}
@@ -152,13 +150,13 @@
 @push('scripts')
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const nearbyCheckbox = document.getElementById("nearby");
     const latField = document.getElementById("user_lat");
     const lngField = document.getElementById("user_lng");
+    const radiusSelect = document.getElementById("radius_filter");
 
-    // ✅ Nearby location logic
-    nearbyCheckbox.addEventListener("change", function() {
-        if (this.checked && navigator.geolocation) {
+    // Fetch user location when nearby radius is selected
+    radiusSelect.addEventListener("change", function() {
+        if (this.value && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 pos => {
                     latField.value = pos.coords.latitude;
@@ -166,16 +164,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 err => {
                     alert("Could not get your location: " + err.message);
-                    this.checked = false; // uncheck if location failed
+                    this.value = ""; // reset if location fails
                 }
             );
-        } else {
-            latField.value = "";
-            lngField.value = "";
         }
     });
 
-    // ✅ Subcategory dynamic loading
+    // Subcategory dynamic loading
     const categoryFilter = document.getElementById('category_filter');
     const subcategoryFilter = document.getElementById('subcategory_filter');
 
@@ -202,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadSubcategories(this.value);
     });
 
-    // ✅ Auto-load subcategories if already selected (keeps state after filter submit)
+    // Auto-load subcategories if already selected
     const preselectedCategory = categoryFilter.value;
     const preselectedSubcategory = "{{ request('subcategory') }}";
     if (preselectedCategory) {

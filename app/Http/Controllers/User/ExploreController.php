@@ -47,22 +47,19 @@ class ExploreController extends Controller
             $query->where('subcategory_id', $subcategoryId);
         }
 
-        // ✅ Nearby filter ONLY if checkbox checked
-        if ($request->has('nearby')) {
-            $userLat = $request->input('lat');
-            $userLng = $request->input('lng');
+        // ✅ Nearby filter by radius (no checkbox)
+        $userLat = $request->input('lat');
+        $userLng = $request->input('lng');
+        $radiusKm = $request->input('radius'); // will be 10/30/50 or null
 
-            if ($userLat && $userLng) {
-                $radiusKm = 10;
-
-                $query->selectRaw("items.*, 
-                    (6371 * acos(
-                        cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) +
-                        sin(radians(?)) * sin(radians(latitude))
-                    )) AS distance", [$userLat, $userLng, $userLat])
-                ->having('distance', '<=', $radiusKm)
-                ->orderBy('distance');
-            }
+        if ($radiusKm && $userLat && $userLng) {
+            $query->selectRaw("items.*, 
+                (6371 * acos(
+                    cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) +
+                    sin(radians(?)) * sin(radians(latitude))
+                )) AS distance", [$userLat, $userLng, $userLat])
+            ->having('distance', '<=', $radiusKm)
+            ->orderBy('distance');
         }
 
         $items = $query->latest()->paginate(15); // 15 items per page

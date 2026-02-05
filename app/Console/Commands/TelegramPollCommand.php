@@ -27,9 +27,9 @@ class TelegramPollCommand extends Command
     public function __construct()
     {
         parent::__construct();
-       // $client = new Client(['verify' => false]);
-       // $httpClient = new GuzzleHttpClient($client);
-       // $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'), false, $httpClient);
+        // $client = new Client(['verify' => false]);
+        // $httpClient = new GuzzleHttpClient($client);
+        // $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'), false, $httpClient);
     }
 
     public function handle()
@@ -238,8 +238,28 @@ class TelegramPollCommand extends Command
                     ]);
                 }
 
+                // 🔹 Prevent accepting unavailable items
+                if (
+                    $exchangeRequest->fromItem->is_available == 0 ||
+                    $exchangeRequest->toItem->is_available == 0
+                ) {
+                    return $this->telegram->sendMessage([
+                        'chat_id' => $chatId,
+                        'text' => "⚠️ One or both items are no longer available."
+                    ]);
+                }
+
                 // Update request status
                 $exchangeRequest->update(['status' => 'accepted']);
+
+                // 🔹 Mark both items as unavailable
+                $exchangeRequest->fromItem->update([
+                    'is_available' => 0,
+                ]);
+
+                $exchangeRequest->toItem->update([
+                    'is_available' => 0,
+                ]);
 
                 // Save chat in DB
                 Chat::create([
