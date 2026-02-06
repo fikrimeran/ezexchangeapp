@@ -48,15 +48,10 @@ class NotificationController extends Controller
             }
 
             // Mark both items as unavailable
-            $exchangeRequest->fromItem->update([
-                'is_available' => 0,
-            ]);
+            $exchangeRequest->fromItem->update(['is_available' => 0]);
+            $exchangeRequest->toItem->update(['is_available' => 0]);
 
-            $exchangeRequest->toItem->update([
-                'is_available' => 0,
-            ]);
-
-            // Send chat notification
+            // Send chat notification to accepted user
             Chat::create([
                 'exchangerequest_id' => $exchangeRequest->id,
                 'from_user_id'       => auth()->id(), // acceptor
@@ -67,11 +62,34 @@ class NotificationController extends Controller
                     ."{$exchangeRequest->toItem->item_name}. "
                     ."Let’s arrange the swap!",
             ]);
+
+            // Automatically decline other pending requests for the same item
+            $otherRequests = ExchangeRequest::where('to_user_id', auth()->id())
+                ->where('to_item_id', $exchangeRequest->to_item_id)
+                ->where('status', 'pending')
+                ->where('id', '!=', $exchangeRequest->id)
+                ->get();
+
+            foreach ($otherRequests as $req) {
+                $this->updateStatus($req, 'declined');
+
+                // Optional: send chat notification to other users
+                Chat::create([
+                    'exchangerequest_id' => $req->id,
+                    'from_user_id'       => auth()->id(), // owner who declined
+                    'to_user_id'         => $req->from_user_id,
+                    'chat_message'       =>
+                        "Hi {$req->fromUser->name}, "
+                        ."your exchange request for "
+                        ."{$req->toItem->item_name} has been declined "
+                        ."because the item has already been traded.",
+                ]);
+            }
         });
 
         return back()->with(
             'success',
-            'Exchange accepted and a chat has send to the requester.'
+            'Exchange accepted. Other requests for this item have been declined automatically.'
         );
     }
 

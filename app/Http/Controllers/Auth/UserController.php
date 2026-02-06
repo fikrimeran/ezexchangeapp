@@ -15,12 +15,15 @@ class UserController extends Controller
     {
         $search = $request->input('search');
 
-        $users = User::when($search, function ($query, $search) {
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%");
-        })
-        ->orderBy('created_at', 'asc') // earliest registered first
-        ->paginate(10); // ✅ 10 users per page
+        $users = User::where('is_admin', 0) 
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('created_at', 'asc') // earliest registered first
+            ->paginate(10); // 10 users per page
 
         return view('auth.users.index', compact('users', 'search'));
     }
