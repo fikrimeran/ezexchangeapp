@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\Item;
 use App\Models\ExchangeRequest;
@@ -94,12 +95,36 @@ class ExchangeRequestController extends Controller
             403
         );
 
-        ExchangeRequest::create([
+        // 🔹 CHANGE 1: store the created request in a variable
+        $exchangeRequest = ExchangeRequest::create([
             'from_user_id' => Auth::id(),
             'to_user_id'   => $item->user_id,
             'from_item_id' => $data['from_item_id'],
             'to_item_id'   => $item->id,
         ]);
+
+        // 🔹 CHANGE 2: send email notification (safe)
+        try {
+            $receiver = $exchangeRequest->toUser;
+            $sender   = Auth::user();
+
+            Mail::raw(
+                "Hello {$receiver->name},\n\n" .
+                "{$sender->name} has sent you an exchange request on EZExchange.\n\n" .
+                "Your Item: {$exchangeRequest->toItem->item_name}\n" .
+                "Offered Item: {$exchangeRequest->fromItem->item_name}\n\n" .
+                "To respond to this exchange request, please visit:\n" .
+                "https://www.ezexchange.me\n\n" .
+                "Thank you,\n" .
+                "EZExchange Team",
+                function ($message) use ($receiver) {
+                    $message->to($receiver->email)
+                            ->subject('New Exchange Request Received');
+                }
+            );
+        } catch (\Exception $e) {
+            // Email failed — exchange request still works
+        }
 
         return redirect()
             ->route('user.explore.show', $item->id)
