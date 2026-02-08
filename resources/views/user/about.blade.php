@@ -109,6 +109,40 @@
         </div>
     </section>
 
+    {{-- TELEGRAM BOT INFO --}}
+    <section class="mt-5 mb-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm rounded-4 bg-light">
+                    <div class="card-body p-4 d-flex flex-column flex-md-row align-items-center">
+
+                        <div class="mb-3 mb-md-0 me-md-4">
+                            <i class="bi bi-telegram fs-1 text-primary"></i>
+                        </div>
+
+                        <div class="text-center text-md-start">
+                            <h3 class="h5 fw-bold mb-2">
+                                Stay Updated with Our Telegram Bot
+                            </h3>
+
+                            <p class="text-muted mb-2">
+                                EZExchange also comes with a Telegram Bot to keep you informed about exchange updates,
+                                notifications, and explore listing items — all in real time.
+                            </p>
+
+                            <a href="https://t.me/EZExchangeApp_bot" target="_blank"
+                            class="btn btn-outline-primary rounded-pill px-4">
+                                <i class="bi bi-telegram me-2"></i>
+                                @EZExchangeApp_bot
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- CTA --}}
     <section class="text-center mt-4">
         <a href="{{ url('/user/explore') }}" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg">
