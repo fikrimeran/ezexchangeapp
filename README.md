@@ -1,2 +1,4 @@
 # ezexchangeapp
-Final Year Project
+Final Year Project by Fikri Meran
+
+EZExchange is a Web-based item exchange that has been created to support peer-to-peer exchange of items among the user base within a given geographical location. It combines the technology of geolocation to make sure that the exchange operations are done with adjacent users and hence, increase the convenience and minimize logistical problems. The platform integrates with Telegram bot that allowing users to conveniently explore listings and sending exchange requests directly through the Telegram application. Moreover, automatic suggestion based on rule-based algorithm is applied, which suggests appropriate partners of the exchange, according to the preset criteria, such as difference in prices, item category and subcategory, and distance level. The web application is created based on Laravel and it is hosted on a cloud server to facilitate real-time communication and connectivity.
